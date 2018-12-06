@@ -1,0 +1,405 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Job Templates and Workflows in Ansible</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/print/pdf.css' : 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+
+    <link rel="stylesheet" href="css/theme/ansible.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/css/zenburn.css"-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css">
+
+
+  </head>
+  <body>
+  <div class="ans-mark">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-449 450 125 125" style="enable-background:new -449 450 125 125;" xml:space="preserve">
+      <g id="XMLID_3_">
+        <circle id="XMLID_7_" class="circle" cx="-386.5" cy="512.5" r="62"/>
+        <path id="XMLID_4_" class="a-mark" d="M-356.9,537.1l-24.7-59.4c-0.7-1.7-2.1-2.6-3.9-2.6c-1.7,0-3.2,0.9-4,2.6l-27.1,65.2h9.2 l10.7-26.9l32,25.9c1.3,1,2.2,1.5,3.4,1.5c2.4,0,4.6-1.8,4.6-4.5C-356.5,538.5-356.6,537.8-356.9,537.1z M-385.4,488.4l16.1,39.6 l-24.2-19L-385.4,488.4z"/>
+      </g>
+    </svg>
+  </div>
+    <div class="reveal">
+      <div class="slides">
+        <section data-state="cover">
+          <p class="ans-logo"><img src="images/ansible-wordmark-white.svg" width="260" alt="" /></p>
+          <h1>Job Templates and Workflows in Ansible Tower</h1>
+          <p>NAME HERE, TITLE HERE</p>
+          <p>COMPANY HERE</p>
+        </section>
+
+        <section>
+          <h2>General Ansible Tower Setup</h2>
+          You will need: <br><br>
+          <ul>
+            <li>Inventory</li>
+            <li>A project to select a playbook from</li>
+            <li>Up-to-date credentials</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>What is a Job Template?</h2>
+          <ul>
+            <li>A definition and set of parameters for running an Ansible playbook</li>
+            <li>In Ansible Tower, they are a visual realization of the <font face="Courier New">ansible-playbook</font> command and all flags you can utilize when executing from the command line</li>
+            <li>It defines the combination of a playbook from a project, an inventory, a credential and any other Ansible parameters required to run</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Before You Start</h2>
+          <p>Whether you're invoking an inventory file or setting tags, you will
+            be adding arguments as part of the job template
+            <br><br>It's recommended to know, before you start:</p>
+          <ul>
+            <li>How to connect to the machine (credentials) </li>
+            <li>What you want to change on the machine (project/playbook)</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Creating a Job Template</h2>
+          <ul>
+            <li>Select Templates from the top of the screen:</li>
+            <p><img src="images/first_one.png"></p>
+            <li>Navigate to the "Add" drop-down box and select Job Template</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+            <h2>Naming and Job Type</h2>
+            <p><img src="images/first_row.png"></p>
+            <ul>
+              <li>Name the job template anything you like</li>
+              <li>Descriptions are optional</li>
+              <li>Select either "Check" or "Run" for Job Type:</li>
+                <em><b>Check</b></em> performs a “dry run” of the playbook<br>
+                <em><b>Run</b></em> will execute the tasks in the playbook on the selected hosts
+              </ul>
+            <aside class="notes">
+              <p> Speaker notes</p>
+            </aside>
+        </section>
+
+        <section>
+            <h2>Inventory, Project, and Playbook Selection</h2>
+            <p><img src="images/second_row.png"></p>
+            <ul>
+              <li>There is a “prompt on launch” option for the Inventory selection; users can alternatively invoke a more complex selection prompt at the beginning of a job using a Survey</li>
+              <li>The Project option determines which playbooks can be selected</li>
+              <li>Tower will not display the full file name of playbooks (<em>e.g.</em>, AWS.yml will display as AWS)</li>
+            </ul>
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+          <h2>Credentials, Forks, Limits</h2>
+          <p><img src="images/third_row.png"></p>
+          <ul>
+            <li>Choose the credential from the available options to be used with this job template</li>
+            <li>Forks are the number of parallel or simultaneous processes to use while executing the playbook; a value of zero uses the Ansible default setting, which is five parallel processes unless overridden in <font face="Courier New">/etc/ansible/ansible.cfg</font></li>
+            <li>The Limit option provides a host pattern to further constrain the list of hosts that will be managed or affected by the playbook; multiple patterns are allowed</li>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Verbosity, Instance Groups, Job Tags</h2>
+          <p><img src="images/fourth_row.png"></p>
+          <ul>
+            <li>Verbosity controls the level of output Ansible will produce as the playbook executes</li>
+            <li>Users can optionally select which Instance Groups the job template will run on</li>
+            <li>Job tags are useful when you have a large playbook and want to run a specific part of a play or task; this option provides a comma-separated list of playbook tags to specify what parts of the playbooks should be executed</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Skip Tags, Labels, Show Changes</h2>
+          <p><img src="images/fifth_row.png"></p>
+          <ul>
+            <li>Skip Tags is a useful option when you have a large playbook and want to skip specific parts of a play or task</li>
+            <li>Labels are optional and can be used to describe the job template, <em>i.e.</em>, "test" or "dev"</li>
+            <li>When Show Changes is on, users can see changes made by Ansible tasks</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Other Options</h2>
+          <p><img src="images/other_options.png"></p>
+          <ul>
+            <li><em>Enable Privilege Escalation:</em>  Enable this to run the playbook as an administrator</li>
+            <li><em>Allow Provisioning Callbacks:</em>  Enables a host to call back to Tower via the Tower API and launch a job from this job template</li>
+            <li><em>Enable Concurrent Jobs:</em>  Allows simultaneous runs of this particular job template</li>
+            <li><em>Use Fact Cache:</em>  When enabled, this activates an Ansible fact cache plugin for all hosts in an inventory related to the job running</li>
+          </ul>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Job Template Example</h2>
+          <p><img src="images/example_template.png"></p>
+          <aside class="notes">
+            <p>Speaker notes</p>
+          </aside>
+        </section>
+
+        <section>
+            <section data-state="title alt">
+              <h1>Job Template Demo Time: <br/>[Could show job templates in Tower (optional)]</h1>
+              <aside class="notes">
+                <p></p>
+              </aside>
+            </section>
+            <section data-state="title alt">
+              <h1>See how it works? <br/>You can put sections inside of sections. (to remove the red just remove the data state)</h1>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+        </section>
+
+            <section>
+              <h2>What is a Workflow?</h2>
+              <ul>
+                <li>Available as of Ansible Tower version 3.1</li>
+                <li>Enables users to create sequences consisting of any combination of job templates, project syncs, and inventory syncs that are linked together in a single unit</li>
+                <li>Helps to organize playbooks and job templates into separate groups</li>
+              </ul>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>What Makes Workflows Useful?</h2>
+              <ul>
+                <li>Can set up ordered structures for different teams to use</li>
+                <li>Not everyone involved will need to know what job run goes after what, since the structure is set up for them by the user who created the workflow</li>
+                <li>Connects disparate job types and unifies projects without each team needing to know everything about what the other does</li>
+                <li>They allow the user to take any number of playbooks and “daisy chain” them</li>
+                <li>Provides the ability to make a decision tree depending on a job’s success or failure</li>
+              </ul>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Creating a Workflow</h2>
+              <p>Go into the Templates section on the top menu of Ansible Tower:</p>
+              <p><img src="images/creating_workflow1.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Creating a Workflow (continued)</h2>
+              <p>From there, click on “Add”, but make sure to select “Workflow Template”:</p>
+              <p><img src="images/creating_workflow2.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Creating a Workflow (continued)</h2>
+              <p>On this screen, name your workflow template anything you like and save it:</p>
+              <p><img src="images/creating_workflow3.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Creating a Workflow (continued)</h2>
+              <p>Go into “Workflow Editor”:</p>
+              <p><img src="images/creating_workflow4.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Creating a Workflow (continued)</h2>
+              <p>Job templates can be added on this screen; users can select set them to run on failure, success, or with either outcome:</p>
+              <p><img src="images/creating_workflow5.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+                  <h2>Example Workflow</h2>
+                  <p>You can make them as simple...</p>
+                  <p><img src="images/SimpleWorkflow.jpg"></p>
+                  <aside class="notes">
+                    <p>Speaker notes</p>
+                  </aside>
+                </section>
+
+                <section>
+                  <h2>Another Example Workflow</h2>
+                  <p>...or as complex as you need to!</p>
+                  <p><img src="images/ComplicatedWorkflow.jpg"></p>
+                  <aside class="notes">
+                    <p>Speaker notes</p>
+                  </aside>
+                </section>
+
+            <section>
+              <h2>Scheduling Workflows</h2>
+              <p>Click on the calendar icon next to any workflow job template:</p>
+              <p><img src="images/schedule_workflows1.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Scheduling Workflows (continued)</h2>
+              <p>...and fill out the information for when you want the specified workflow to automatically run:</p>
+              <p><img src="images/schedule_workflows2.jpg"></p>
+              <aside class="notes">
+                <p>Speaker notes</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Duplicating Workflows</h2>
+              <p>To make a copy of an existing workflow, click on the button highlighted below:</p>
+              <p><img src="images/copy_workflows.jpg"></p>
+              <aside class="notes">
+                <p>Keep in mind that copying a workflow won’t also copy over any of the permissions, notifications, or schedules associated with the original.</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Surveys</h2>
+              <p>Select a workflow template and click on the “Add Survey” button:</p>
+              <p><img src="images/workflow_survey1.jpg"></p>
+              <aside class="notes">
+                <p>If you need to set extra variables for the playbooks involved in a workflow template and/or allow for authorization of user input, then setting up surveys is the way to go.</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Surveys (continued)</h2>
+              <p>A survey screen that you can fill out with specific questions and answer types will show up:</p>
+              <p><img src="images/workflow_survey2.jpg"></p>
+              <aside class="notes">
+                <p>If you need to set extra variables for the playbooks involved in a workflow template and/or allow for authorization of user input, then setting up surveys is the way to go.</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Notifications</h2>
+              <p>Select the workflow that you want to set notifications for, then click the Notifications button:</p>
+              <p><img src="images/workflow_notification1.jpg"></p>
+              <aside class="notes">
+                <p>Notifications can give you more control and knowledge related to specific workflows.</p>
+              </aside>
+            </section>
+
+            <section>
+              <h2>Notifications (continued)</h2>
+              <p>The screen that comes up will enable you to select specific notifications; in the example below the “Workflow-Specific Notification” has been set to activate on either a successful or failed run:</p>
+              <p><img src="images/workflow_notification2.jpg"></p>
+              <aside class="notes">
+                <p>Keep in mind that you’ll have to already have some notifications set up in the Notifications list.
+                  Also, make sure you have “update on launch” on your inventory selected when you make a new workflow job template if you’re acting against a dynamic inventory!</p>
+              </aside>
+            </section>
+
+            <section>
+                <section data-state="title alt">
+                  <h1>Workflow Demo Time: <br/>[Could show workflows in Tower (optional)]</h1>
+                  <aside class="notes">
+                    <p></p>
+                  </aside>
+                </section>
+                <section data-state="title alt">
+                  <h1>See how it works? <br/>You can put sections inside of sections. (to remove the red just remove the data state)</h1>
+                  <aside class="notes">
+                    <p>Speaker notes</p>
+                  </aside>
+                </section>
+            </section>
+
+        <section>
+          <h2>For More Information</h2>
+            <p><b>Official Ansible Documentation:</b><br><br>
+            <em>Job Templates</em><br>
+            https://docs.ansible.com/ansible-tower/latest/html/userguide/job_templates.html<br><br>
+            <em>Workflows</em><br>
+            https://docs.ansible.com/ansible-tower/latest/html/userguide/workflow_templates.html<br>
+            <br></p>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+        width: "85%",
+        height: "90%",
+        transition: "fade",
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        // Notes plugin must remain local for now.
+        // See https://github.com/ansible/lightbulb/issues/125
+        dependencies: [
+          { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js' },
+          { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js'},
+          { src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-yaml.min.js'}
+          //{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
